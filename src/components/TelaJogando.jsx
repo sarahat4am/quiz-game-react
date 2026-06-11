@@ -1,27 +1,26 @@
 import { useState, useEffect } from 'react';
 
 export function TelaJogando({ perguntaAtual, numeroPergunta, totalPerguntas, verificarResposta }) {
-  // Estado local para guardar as respostas já embaralhadas
+  // Estado para guardar as alternativas já misturadas
   const [respostasEmbaralhadas, setRespostasEmbaralhadas] = useState([]);
 
-  // Toda vez que a 'perguntaAtual' mudar, esse useEffect roda de novo
+  // BLOCO 2: O Desafio do Embaralhamento
+  // Sempre que a perguntaAtual mudar, este bloco reorganiza as opções
   useEffect(() => {
     if (perguntaAtual) {
-      // 1. Junta a resposta certa com as erradas em um array só
       const todasAsRespostas = [
-        ...perguntaAtual.incorrect_answers,
-        perguntaAtual.correct_answer
+        ...perguntaAtual.incorrect_answers, // "Desempacota" as opções erradas
+        perguntaAtual.correct_answer        // Adiciona a opção certa
       ];
 
-      // 2. Embaralha o array
+      // Mistura a ordem de forma aleatória
       const misturadas = todasAsRespostas.sort(() => Math.random() - 0.5);
       
-      // 3. Salva no estado
       setRespostasEmbaralhadas(misturadas);
     }
   }, [perguntaAtual]);
 
-  // Trava de segurança enquanto a internet não responde
+  // Trava de segurança para o "undefined"
   if (!perguntaAtual) {
     return (
       <div className="bg-white p-8 rounded-xl text-center w-full max-w-lg shadow-xl">
@@ -43,10 +42,11 @@ export function TelaJogando({ perguntaAtual, numeroPergunta, totalPerguntas, ver
       </h2>
 
       <div className="flex flex-col gap-3">
-        {/* Renderiza um botão para cada resposta do array embaralhado */}
+        {/* BLOCO 3: Criando os botões de forma automática com map */}
         {respostasEmbaralhadas.map((resposta, index) => (
           <button 
             key={index}
+            // Ao clicar, executa a função lá do App.jsx passando o texto do botão
             onClick={() => verificarResposta(resposta)}
             className="bg-gray-100 hover:bg-blue-100 text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 transition-colors"
           >
