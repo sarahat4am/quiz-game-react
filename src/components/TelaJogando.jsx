@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
 
+const decodificarTexto = (texto) => {
+  const textArea = document.createElement("textarea");
+  textArea.innerHTML = texto;
+  return textArea.value;
+};
+
 export function TelaJogando({ perguntaAtual, numeroPergunta, totalPerguntas, verificarResposta }) {
   // Estado para guardar as alternativas já misturadas
   const [respostasEmbaralhadas, setRespostasEmbaralhadas] = useState([]);
@@ -38,7 +44,7 @@ export function TelaJogando({ perguntaAtual, numeroPergunta, totalPerguntas, ver
       </span>
 
       <h2 className="text-2xl font-bold text-gray-800 mt-4 mb-8">
-        {perguntaAtual.question}
+        {decodificarTexto(perguntaAtual.question)}
       </h2>
 
       <div className="flex flex-col gap-3">
@@ -46,11 +52,10 @@ export function TelaJogando({ perguntaAtual, numeroPergunta, totalPerguntas, ver
         {respostasEmbaralhadas.map((resposta, index) => (
           <button 
             key={index}
-            // Ao clicar, executa a função lá do App.jsx passando o texto do botão
             onClick={() => verificarResposta(resposta)}
             className="bg-gray-100 hover:bg-blue-100 text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 transition-colors"
           >
-            {resposta}
+            {decodificarTexto(resposta)}
           </button>
         ))}
       </div>
